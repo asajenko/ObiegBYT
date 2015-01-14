@@ -54,6 +54,7 @@
                     <div id="menubar">
                         <ul id="menu">
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci"/></li>
+                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="invoicelist" value="Lista faktur"/></li>
                             <li><p:commandLink value="Wyloguj" action="#{loginBackup.logout}"/></li>
                         </ul>
                         <ul id="menuhelp">
@@ -62,24 +63,12 @@
                     </div>
                 </div>
                 <div id="site_content">
-                    
+
                     <div id="content">
                         <p:growl id="msg" showDetail="true" sticky="true"/>
                         <p:commandButton onclick="PF('addDlg').show();" value="Stwórz kontrahenta"/>
-                        
-                        <p:dialog id="addDlg" widgetVar="addDlg">
-                            Numer: <p:inputText value="#{listBean.newClient.number}"/><br/>
-                            Adres: <p:inputText value="#{listBean.newClient.adres}"/><br/>
-                            Email: <p:inputText value="#{listBean.newClient.email}"/><br/>
-                            Dostawca: <p:inputText value="#{listBean.newClient.dostawca}"/><br/>
-                            Produkt: <p:inputText value="#{listBean.newClient.produkt}"/><br/>
-                            Typ dostawcy: <p:inputText value="#{listBean.newClient.typdostawcy}"/><br/>
-                            <p:commandButton value="Dodaj" action="#{listBean.createClient()}" update=":form:clientTable" oncomplete="PF('addDlg').hide();"/>
-                        </p:dialog>
-                      
-                        
                         <p:dataTable value="#{listBean.clients}" var="client" id="clientTable">
-                            
+
                             <p:column headerText="ID">
                                 #{client.id}
                             </p:column>
@@ -106,7 +95,15 @@
                             </p:column>
                         </p:dataTable>
 
-
+                        <p:dialog id="addDlg" widgetVar="addDlg">
+                            Numer: <p:inputText value="#{listBean.newClient.number}"/><br/>
+                            Adres: <p:inputText value="#{listBean.newClient.adres}"/><br/>
+                            Email: <p:inputText value="#{listBean.newClient.email}"/><br/>
+                            Dostawca: <p:inputText value="#{listBean.newClient.dostawca}"/><br/>
+                            Produkt: <p:inputText value="#{listBean.newClient.produkt}"/><br/>
+                            Typ dostawcy: <p:inputText value="#{listBean.newClient.typdostawcy}"/><br/>
+                            <p:commandButton value="Dodaj" action="#{listBean.createClient()}" update=":form:clientTable" oncomplete="PF('addDlg').hide();"/>
+                        </p:dialog>
                     </div>
                 </div>
                 <div id="footer">Copyright &copy; SeveNet S.A. All Rights Reserved.</div>

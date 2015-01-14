@@ -17,6 +17,7 @@ import entities.Invoice;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.transaction.UserTransaction;
 import jpa.exceptions.NonexistentEntityException;
 import jpa.exceptions.RollbackFailureException;
@@ -27,11 +28,9 @@ import jpa.exceptions.RollbackFailureException;
  */
 public class InvoiceJpaController implements Serializable {
 
-    public InvoiceJpaController(UserTransaction utx, EntityManagerFactory emf) {
-        this.utx = utx;
-        this.emf = emf;
+    public InvoiceJpaController() {
+        emf = Persistence.createEntityManagerFactory("bungePU");
     }
-    private UserTransaction utx = null;
     private EntityManagerFactory emf = null;
 
     public EntityManager getEntityManager() {
@@ -41,8 +40,8 @@ public class InvoiceJpaController implements Serializable {
     public void create(Invoice invoice) throws RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
+            em.getTransaction().begin();
             Users insertedBy = invoice.getInsertedBy();
             if (insertedBy != null) {
                 insertedBy = em.getReference(insertedBy.getClass(), insertedBy.getUserId());
@@ -62,10 +61,10 @@ public class InvoiceJpaController implements Serializable {
                 clientId.getInvoiceList().add(invoice);
                 clientId = em.merge(clientId);
             }
-            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -80,8 +79,8 @@ public class InvoiceJpaController implements Serializable {
     public void edit(Invoice invoice) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
+            em.getTransaction().begin();
             Invoice persistentInvoice = em.find(Invoice.class, invoice.getId());
             Users insertedByOld = persistentInvoice.getInsertedBy();
             Users insertedByNew = invoice.getInsertedBy();
@@ -112,10 +111,10 @@ public class InvoiceJpaController implements Serializable {
                 clientIdNew.getInvoiceList().add(invoice);
                 clientIdNew = em.merge(clientIdNew);
             }
-            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
@@ -137,8 +136,8 @@ public class InvoiceJpaController implements Serializable {
     public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
+            em.getTransaction().begin();
             Invoice invoice;
             try {
                 invoice = em.getReference(Invoice.class, id);
@@ -157,10 +156,10 @@ public class InvoiceJpaController implements Serializable {
                 clientId = em.merge(clientId);
             }
             em.remove(invoice);
-            utx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+                em.getTransaction().rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
