@@ -19,6 +19,11 @@
             <to-view-id>/system/invoice_list.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
+            <display-name>documentlist</display-name>
+            <from-outcome>documentlist</from-outcome>
+            <to-view-id>/system/document_list.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
             <display-name>logout</display-name>
             <from-outcome>logout</from-outcome>
             <to-view-id>/logout.xhtml</to-view-id>

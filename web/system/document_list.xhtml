@@ -11,7 +11,7 @@
         <link rel="stylesheet" type="text/css" href="${applicationBackup.appCtx}/style/style.css" />
     </h:head>
     <h:body>
-        <script type="text/javascript">
+        <script type="text/javascript">;
             PrimeFaces.locales['pl'] = {
                 closeText: 'Zamknij',
                 prevText: 'Poprzedni',
@@ -64,48 +64,29 @@
                     </div>
                 </div>
                 <div id="site_content">
+
                     <div id="content">
                         <p:growl id="msg" showDetail="true" sticky="true"/>
-                        <p:commandButton onclick="PF('addDlg').show();" value="Stwórz pracownika"/>
-                        <p:dataTable id="usersTable" value="#{usersBean.users}" var="user">
-                            <p:column headerText="Login">
-                                #{user.username}
+
+                        <p:dataTable value="#{documentListBean.documents}" var="document" id="documentTable">
+                            <p:column headerText="Nr dokumentu">
+                                #{document.number}
                             </p:column>
-                            <p:column headerText="Imię">
-                                #{user.firstName}
+                            <p:column headerText="Data dostarczenia">
+                                #{document.dataDostarczenia}
                             </p:column>
-                            <p:column headerText="Nazwisko">
-                                #{user.lastName}
+                            <p:column headerText="Data dodania">
+                                #{document.inserted}
                             </p:column>
-                            <p:column headerText="Administrator">
-                                #{user.admin}
+                            <p:column headerText="Osoba dodająca">
+                                #{document.insertedBy}
                             </p:column>
-                            <p:column headerText="Rola">
-                                #{user.rola}
-                            </p:column>
-                            <p:column width="20">
-                                <p:commandButton icon=" ui-icon-circle-close" immediate="true" action="#{usersBean.deleteUser(user)}" title="Usuń użytkownika" onstart="dlg.show();" oncomplete="dlg.hide();"/>
+                            <p:column headerText="Nadawca">
+                                #{document.nadawca}
                             </p:column>
                         </p:dataTable>
 
-                        <p:dialog id="addDlg" widgetVar="addDlg">
-                            Login: <p:inputText value="#{usersBean.newUser.username}"/><br/>
-                            Imię: <p:inputText value="#{usersBean.newUser.firstName}"/><br/>
-                            Nazwisko: <p:inputText value="#{usersBean.newUser.lastName}"/><br/>
-                            Admin: <p:selectBooleanCheckbox value="#{usersBean.admin}"/><br/>
-                            Rola:
-                            <p:selectOneMenu value="#{usersBean.newUser.rola}">
-                                <f:selectItem itemLabel="Użytkownik" itemValue="Użytkownik"/>
-                                <f:selectItem itemLabel="Księgowość" itemValue="Księgowość"/>
-                                <f:selectItem itemLabel="Sekretariat" itemValue="Sekretariat"/>
-                                <f:selectItem itemLabel="Zarząd" itemValue="Zarząd"/>
-                            </p:selectOneMenu><br/>
-                            <p:commandButton value="Dodaj" action="#{usersBean.createUser()}" update=":form:usersTable" oncomplete="PF('addDlg').hide();"/>
-                        </p:dialog>
 
-                        <p:dialog header="Operacja w toku" visible="false" modal="true" closable="false" draggable="false" minimizable="false" resizable="false" widgetVar="dlg">
-                            Proszę czekać.
-                        </p:dialog>
                     </div>
                 </div>
                 <div id="footer">Copyright &copy; SeveNet S.A. All Rights Reserved.</div>

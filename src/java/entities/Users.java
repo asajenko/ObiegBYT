@@ -40,6 +40,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByLastName", query = "SELECT u FROM Users u WHERE u.lastName = :lastName"),
     @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password")})
 public class Users implements Serializable {
+    @OneToMany(mappedBy = "insertedBy")
+    private List<Document> documentList;
 
     @OneToMany(mappedBy = "insertedBy")
     private List<Invoice> invoiceList;
@@ -194,6 +196,15 @@ public class Users implements Serializable {
             }
         }
         return false;
+    }
+
+    @XmlTransient
+    public List<Document> getDocumentList() {
+        return documentList;
+    }
+
+    public void setDocumentList(List<Document> documentList) {
+        this.documentList = documentList;
     }
 
 }
