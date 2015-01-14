@@ -75,11 +75,14 @@
                             <p:column headerText="Nazwisko">
                                 #{user.lastName}
                             </p:column>
-                            <p:column headerText="Typy">
-                                #{user.groupsCollection}
+                            <p:column headerText="Administrator">
+                                #{user.admin}
                             </p:column>
                             <p:column headerText="Rola">
                                 #{user.rola}
+                            </p:column>
+                            <p:column width="20">
+                                <p:commandButton icon=" ui-icon-circle-close" immediate="true" action="#{usersBean.deleteUser(user)}" title="Usuń użytkownika" onstart="dlg.show();" oncomplete="dlg.hide();"/>
                             </p:column>
                         </p:dataTable>
 
@@ -96,6 +99,10 @@
                                 <f:selectItem itemLabel="Zarząd" itemValue="Zarząd"/>
                             </p:selectOneMenu><br/>
                             <p:commandButton value="Dodaj" action="#{usersBean.createUser()}" update=":form:usersTable" oncomplete="PF('addDlg').hide();"/>
+                        </p:dialog>
+
+                        <p:dialog header="Operacja w toku" visible="false" modal="true" closable="false" draggable="false" minimizable="false" resizable="false" widgetVar="dlg">
+                            Proszę czekać.
                         </p:dialog>
                     </div>
                 </div>

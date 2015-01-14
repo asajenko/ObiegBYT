@@ -20,6 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import jpa.GroupsJpaController;
 import jpa.UsersJpaController;
+import jpa.exceptions.RollbackFailureException;
 
 /**
  *
@@ -74,6 +75,16 @@ public class UsersBean {
             }
             newUser.setPassword(hashPassword("password"));
             ujc.create(newUser);
+        } catch (Exception ex) {
+            Logger.getLogger(UsersBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void deleteUser(Users user) {
+        try {
+            ujc.destroy(user.getUserId());
+        } catch (RollbackFailureException ex) {
+            Logger.getLogger(UsersBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(UsersBean.class.getName()).log(Level.SEVERE, null, ex);
         }

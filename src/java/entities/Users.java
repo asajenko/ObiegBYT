@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -183,6 +184,16 @@ public class Users implements Serializable {
 
     public void setInvoiceList(List<Invoice> invoiceList) {
         this.invoiceList = invoiceList;
+    }
+
+    @Transient
+    public boolean isAdmin() {
+        for (Groups grupa : groupsCollection) {
+            if (grupa.getGroupName().equalsIgnoreCase("ADMIN")) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
