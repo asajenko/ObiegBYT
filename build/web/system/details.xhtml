@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>SeveNet CRM - Index</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" type="text/css" href="${applicationBackup.appCtx}/style/style.css" />
+    </h:head>
+    <h:body>
+        <script type="text/javascript">;
+            PrimeFaces.locales['pl'] = {
+                closeText: 'Zamknij',
+                prevText: 'Poprzedni',
+                nextText: 'Następny',
+                monthNames: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+                monthNamesShort: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
+                dayNames: ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'],
+                dayNamesShort: ['Nie', 'Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'So'],
+                dayNamesMin: ['N', 'P', 'W', 'Ś', 'Cz', 'P', 'S'],
+                weekHeader: 'Tydzień',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: 'r',
+                timeOnlyTitle: 'Tylko czas',
+                timeText: 'Czas',
+                hourText: 'Godzina',
+                minuteText: 'Minuta',
+                secondText: 'Sekunda',
+                currentText: 'Teraz',
+                ampm: false,
+                month: 'Miesiąc',
+                week: 'Tydzień',
+                day: 'Dzień',
+                allDayText: 'Cały dzień'
+            };
+        </script>
+        <h:form id="form">
+            <div id="main">
+                <div id="links"></div>
+                <div id="header">
+                    <div id="logo">
+                        <div id="logo_text">
+                            <!-- class="yellow", allows you to change the colour of the text - other classes are: "blue", "orange", "red", "purple" and "green" -->
+                            <h1><span class="yellow">&nbsp;</span></h1>
+                            <h2>SeveNet CRM</h2>
+                        </div>
+                        <font style="text-align: right; position: relative; top: 130px; left: 800px">Version: #{applicationBackup.version}<font color="red" size="3"><b><p:outputLabel value=" #{applicationBackup.projectStage}" rendered="#{'Development' eq applicationBackup.projectStage or 'Unknow' eq applicationBackup.projectStage}"/></b></font></font>
+                    </div>
+                    <div id="menubar">
+                        <ul id="menu">
+                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci"/></li>
+                            <li><p:commandLink value="Wyloguj" action="#{loginBackup.logout}"/></li>
+                        </ul>
+                        <!--                        <ul id="menuhelp">
+                                                    <li><a href="${applicationBackup.appCtx}/system/user.xhtml" align ="right">Zmiana hasła</a></li>
+                                                </ul>-->
+                    </div>
+                </div>
+                <div id="site_content">
+                    <div id="content">
+                        <p:growl id="msg" showDetail="true" sticky="true"/>
+                        <h:inputHidden value="#{detailsBean.filtr}"/>
+                        <h:inputHidden value="#{detailsBean.selectedClient.id}"/>
+                        <p:panel>
+                            Numer: #{detailsBean.selectedClient.number}<br/>
+                            E-Mail: #{detailsBean.selectedClient.email}<br/>
+                            Adres: #{detailsBean.selectedClient.adres}<br/>
+                            Dostawca: #{detailsBean.selectedClient.dostawca}<br/>
+                            Produkt: #{detailsBean.selectedClient.produkt}<br/>
+                            Typ dostawcy: #{detailsBean.selectedClient.typdostawcy}
+                        </p:panel>
+                        <p:panelGrid id ="hist" style="width: 100%;">
+                            <p:row>
+                                <p:column>
+                                    <p:commandButton value="Dodaj notatke" type="button" onclick="PF('newDlg').show();"/>
+                                    <br/>
+                                    <b>Lista notatek:</b><br/>
+                                </p:column>
+
+                                <p:column>
+                                    <p:commandButton value="Dodaj notatke" type="button" onclick="PF('newTrans').show();"/>
+                                    <br/>
+                                    <b>Lista transakcji:</b><br/>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="width: 50%; vertical-align: top;">
+                                    <ui:repeat var="comment" value="#{detailsBean.selectedClient.noteList}">
+                                        <font color='red'>Konsultant: #{comment.konsultant}</font><br/>
+                                        Data utworzenia: 
+                                        <h:outputText value="#{comment.inserted}" style="color: black; padding: 0">
+                                            <f:converter converterId="web.DateConverter"/>
+                                        </h:outputText><br/>
+                                        Treść: #{comment.tres}<br/>
+                                        <br/>
+                                    </ui:repeat>
+                                </p:column>
+
+                                <p:column style="width: 50%; vertical-align: top;">
+                                    <ui:repeat var="transaction" value="#{detailsBean.selectedClient.transactionList}">
+                                        <font color='red'>Konsultant: #{transaction.konsultant}</font><br/>
+                                        Data utworzenia: 
+                                        <h:outputText value="#{transaction.inserted}" style="color: black; padding: 0">
+                                            <f:converter converterId="web.DateConverter"/>
+                                        </h:outputText><br/>
+                                        Treść: #{transaction.tresc}<br/>
+                                        Status: #{detailsBean.getStateName(transaction.status)}
+                                        <br/>
+                                    </ui:repeat>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                        <p:dialog header="Nowa notatka" widgetVar="newDlg" resizable="false" showEffect="explode" hideEffect="explode" maximizable="true" minimizable="true">
+                            <p:inputTextarea cols="100" rows="5" value="#{detailsBean.newContent}"/><br/>
+                            <p:commandButton value="Zapisz" action="#{detailsBean.addNewNote()}" onsuccess="PF('newDlg').hide();" update=":form:hist msg"/>
+                        </p:dialog>
+
+                        <p:dialog header="Nowa transakcja" widgetVar="newTrans" resizable="false" showEffect="explode" hideEffect="explode" maximizable="true" minimizable="true">
+                            <p:inputTextarea cols="100" rows="5" value="#{detailsBean.newTransactionContent}"/><br/>
+                            <p:commandButton value="Zapisz" action="#{detailsBean.addNewTrans()}" onsuccess="PF('newTrans').hide();" update=":form:hist msg"/>
+                        </p:dialog>
+                    </div>
+                </div>
+                <div id="footer">Copyright &copy; SeveNet S.A. All Rights Reserved.</div>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+

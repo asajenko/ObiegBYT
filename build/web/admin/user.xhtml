@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>SajFly - Obieg dokumentów</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" type="text/css" href="${applicationBackup.appCtx}/style/style.css" />
+    </h:head>
+    <h:body>
+        <script type="text/javascript">
+            PrimeFaces.locales['pl'] = {
+                closeText: 'Zamknij',
+                prevText: 'Poprzedni',
+                nextText: 'Następny',
+                monthNames: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+                monthNamesShort: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
+                dayNames: ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'],
+                dayNamesShort: ['Nie', 'Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'So'],
+                dayNamesMin: ['N', 'P', 'W', 'Ś', 'Cz', 'P', 'S'],
+                weekHeader: 'Tydzień',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: 'r',
+                timeOnlyTitle: 'Tylko czas',
+                timeText: 'Czas',
+                hourText: 'Godzina',
+                minuteText: 'Minuta',
+                secondText: 'Sekunda',
+                currentText: 'Teraz',
+                ampm: false,
+                month: 'Miesiąc',
+                week: 'Tydzień',
+                day: 'Dzień',
+                allDayText: 'Cały dzień'
+            };
+        </script>
+        <h:form id="form">
+            <div id="main">
+                <div id="links"></div>
+                <div id="header">
+                    <div id="logo">
+                        <div id="logo_text">
+                            <!-- class="yellow", allows you to change the colour of the text - other classes are: "blue", "orange", "red", "purple" and "green" -->
+                            <h1><span class="yellow">&nbsp;</span></h1>
+                            <h2>SajFly Obieg dokumentów</h2>
+                        </div>
+                        <font style="text-align: right; position: relative; top: 130px; left: 800px">Version: #{applicationBackup.version}<font color="red" size="3"><b><p:outputLabel value=" #{applicationBackup.projectStage}" rendered="#{'Development' eq applicationBackup.projectStage or 'Unknow' eq applicationBackup.projectStage}"/></b></font></font>
+                    </div>
+                    <div id="menubar">
+                        <ul id="menu">
+                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Nowy dokument"/></li>
+                            <li><p:commandLink value="Wyloguj" action="#{loginBackup.logout}"/></li>
+                        </ul>
+                        <ul id="menuhelp">
+                            <li><a href="${applicationBackup.appCtx}/system/user.xhtml" align ="right">Zmiana hasła</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="site_content">
+                    <div id="content">
+                        <p:growl id="msg" showDetail="true" sticky="true"/>
+                        <p:commandButton onclick="PF('addDlg').show();" value="Stwórz pracownika"/>
+                        <p:dataTable id="usersTable" value="#{usersBean.users}" var="user">
+                            <p:column headerText="Login">
+                                #{user.username}
+                            </p:column>
+                            <p:column headerText="Imię">
+                                #{user.firstName}
+                            </p:column>
+                            <p:column headerText="Nazwisko">
+                                #{user.lastName}
+                            </p:column>
+                            <p:column headerText="Typy">
+                                #{user.groupsCollection}
+                            </p:column>
+                            <p:column headerText="Rola">
+                                #{user.rola}
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:dialog id="addDlg" widgetVar="addDlg">
+                            Login: <p:inputText value="#{usersBean.newUser.username}"/><br/>
+                            Imię: <p:inputText value="#{usersBean.newUser.firstName}"/><br/>
+                            Nazwisko: <p:inputText value="#{usersBean.newUser.lastName}"/><br/>
+                            Admin: <p:selectBooleanCheckbox value="#{usersBean.admin}"/><br/>
+                            Rola:
+                            <p:selectOneMenu value="#{usersBean.newUser.rola}">
+                                <f:selectItem itemLabel="Użytkownik" itemValue="Użytkownik"/>
+                                <f:selectItem itemLabel="Księgowość" itemValue="Księgowość"/>
+                                <f:selectItem itemLabel="Sekretariat" itemValue="Sekretariat"/>
+                                <f:selectItem itemLabel="Zarząd" itemValue="Zarząd"/>
+                            </p:selectOneMenu><br/>
+                            <p:commandButton value="Dodaj" action="#{usersBean.createUser()}" update=":form:usersTable" oncomplete="PF('addDlg').hide();"/>
+                        </p:dialog>
+                    </div>
+                </div>
+                <div id="footer">Copyright &copy; SeveNet S.A. All Rights Reserved.</div>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+
