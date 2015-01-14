@@ -153,4 +153,15 @@ public class DetailsBean implements Serializable {
         }
         return null;
     }
+    
+    public String deleteClient() {
+        try {
+            cjc.destroy(selectedClient.getId());
+        } catch (RollbackFailureException ex) {
+            Logger.getLogger(ListBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(ListBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "index";
+    }
 }

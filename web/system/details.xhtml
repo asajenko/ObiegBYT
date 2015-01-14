@@ -55,11 +55,12 @@
                     <div id="menubar">
                         <ul id="menu">
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci"/></li>
+                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="invoicelist" value="Lista faktur"/></li>
                             <li><p:commandLink value="Wyloguj" action="#{loginBackup.logout}"/></li>
                         </ul>
-                        <!--                        <ul id="menuhelp">
-                                                    <li><a href="${applicationBackup.appCtx}/system/user.xhtml" align ="right">Zmiana hasła</a></li>
-                                                </ul>-->
+                        <ul id="menuhelp">
+                            <li><a href="${applicationBackup.appCtx}/admin/user.xhtml" align ="right">Użytkownicy</a></li>
+                        </ul>
                     </div>
                 </div>
                 <div id="site_content">
@@ -74,57 +75,10 @@
                             Dostawca: #{detailsBean.selectedClient.dostawca}<br/>
                             Produkt: #{detailsBean.selectedClient.produkt}<br/>
                             Typ dostawcy: #{detailsBean.selectedClient.typdostawcy}
+
+
                         </p:panel>
-                        <p:panelGrid id ="hist" style="width: 100%;">
-                            <p:row>
-                                <p:column>
-                                    <p:commandButton value="Dodaj notatke" type="button" onclick="PF('newDlg').show();"/>
-                                    <br/>
-                                    <b>Lista notatek:</b><br/>
-                                </p:column>
-
-                                <p:column>
-                                    <p:commandButton value="Dodaj notatke" type="button" onclick="PF('newTrans').show();"/>
-                                    <br/>
-                                    <b>Lista transakcji:</b><br/>
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column style="width: 50%; vertical-align: top;">
-                                    <ui:repeat var="comment" value="#{detailsBean.selectedClient.noteList}">
-                                        <font color='red'>Konsultant: #{comment.konsultant}</font><br/>
-                                        Data utworzenia: 
-                                        <h:outputText value="#{comment.inserted}" style="color: black; padding: 0">
-                                            <f:converter converterId="web.DateConverter"/>
-                                        </h:outputText><br/>
-                                        Treść: #{comment.tres}<br/>
-                                        <br/>
-                                    </ui:repeat>
-                                </p:column>
-
-                                <p:column style="width: 50%; vertical-align: top;">
-                                    <ui:repeat var="transaction" value="#{detailsBean.selectedClient.transactionList}">
-                                        <font color='red'>Konsultant: #{transaction.konsultant}</font><br/>
-                                        Data utworzenia: 
-                                        <h:outputText value="#{transaction.inserted}" style="color: black; padding: 0">
-                                            <f:converter converterId="web.DateConverter"/>
-                                        </h:outputText><br/>
-                                        Treść: #{transaction.tresc}<br/>
-                                        Status: #{detailsBean.getStateName(transaction.status)}
-                                        <br/>
-                                    </ui:repeat>
-                                </p:column>
-                            </p:row>
-                        </p:panelGrid>
-                        <p:dialog header="Nowa notatka" widgetVar="newDlg" resizable="false" showEffect="explode" hideEffect="explode" maximizable="true" minimizable="true">
-                            <p:inputTextarea cols="100" rows="5" value="#{detailsBean.newContent}"/><br/>
-                            <p:commandButton value="Zapisz" action="#{detailsBean.addNewNote()}" onsuccess="PF('newDlg').hide();" update=":form:hist msg"/>
-                        </p:dialog>
-
-                        <p:dialog header="Nowa transakcja" widgetVar="newTrans" resizable="false" showEffect="explode" hideEffect="explode" maximizable="true" minimizable="true">
-                            <p:inputTextarea cols="100" rows="5" value="#{detailsBean.newTransactionContent}"/><br/>
-                            <p:commandButton value="Zapisz" action="#{detailsBean.addNewTrans()}" onsuccess="PF('newTrans').hide();" update=":form:hist msg"/>
-                        </p:dialog>
+                        <p:commandButton icon=" ui-icon-circle-close" immediate="true" action="#{detailsBean.deleteClient}" title="Usuń użytkownika" onstart="dlg.show();" oncomplete="dlg.hide();" value="Usuń"/>
                     </div>
                 </div>
                 <div id="footer">Copyright &copy; SeveNet S.A. All Rights Reserved.</div>

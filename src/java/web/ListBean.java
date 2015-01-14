@@ -21,6 +21,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import jpa.ClientJpaController;
 import jpa.GroupsJpaController;
+import jpa.exceptions.RollbackFailureException;
 
 /**
  *
@@ -58,10 +59,8 @@ public class ListBean {
             Logger.getLogger(ListBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-        
-        
     
-    public void goToDetails(int id) {
+   public void goToDetails(int id) {
         ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String appCtx = servletContext.getContextPath();
         try {
