@@ -12,6 +12,7 @@ import entities.Users;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -156,12 +157,17 @@ public class DetailsBean implements Serializable {
     
     public String deleteClient() {
         try {
+            appBean.addFacesMessage("Udało się usunąć klienta", 0);
             cjc.destroy(selectedClient.getId());
         } catch (RollbackFailureException ex) {
             Logger.getLogger(ListBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(ListBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return "index";
+    }
+    
+    public String goToIndex(){
         return "index";
     }
 }
