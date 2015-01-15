@@ -154,7 +154,7 @@ public class DetailsBean implements Serializable {
         }
         return null;
     }
-    
+
     public String deleteClient() {
         try {
             appBean.addFacesMessage("Udało się usunąć klienta", 0);
@@ -166,8 +166,18 @@ public class DetailsBean implements Serializable {
         }
         return "index";
     }
-    
-    public String goToIndex(){
+
+    public String goToIndex() {
         return "index";
+    }
+
+    public void updateCient() {
+        try {
+            appBean.addFacesMessage("Udało się zapisać nowe dane klienta", 0);
+            cjc.edit(selectedClient);
+        } catch (Exception ex) {
+            Logger.getLogger(ListBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
     }
 }

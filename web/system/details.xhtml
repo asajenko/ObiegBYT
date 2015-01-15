@@ -69,15 +69,42 @@
                         <p:growl id="msg" showDetail="true" sticky="true"/>
                         <h:inputHidden value="#{detailsBean.filtr}"/>
                         <h:inputHidden value="#{detailsBean.selectedClient.id}"/>
-                        <p:panel>
-                            Numer: #{detailsBean.selectedClient.number}<br/>
-                            E-Mail: #{detailsBean.selectedClient.email}<br/>
-                            Adres: #{detailsBean.selectedClient.adres}<br/>
-                            Dostawca: #{detailsBean.selectedClient.dostawca}<br/>
-                            Produkt: #{detailsBean.selectedClient.produkt}<br/>
-                            Typ dostawcy: #{detailsBean.selectedClient.typdostawcy}
+                        <p:panel header="Edycja klienta: #{detailsBean.selectedClient.dostawca}">
+                            <h:panelGrid columns="2" columnClasses="column" cellpadding="5" >
+                                <h:outputLabel for="Numer" value="Numer:" />
+                                <p:inplace id="numer" editor="true">
+                                    <p:inputText value="#{detailsBean.selectedClient.number}" required="true"/>
+                                </p:inplace>
+
+                                <h:outputLabel for="E-Mail" value="E-Mail:" />
+                                <p:inplace id="E-Mail" editor="true">
+                                    <p:inputText value="#{detailsBean.selectedClient.email}" required="true"/>
+                                </p:inplace>
+
+                                <h:outputLabel for="Adres" value="Adres:" />
+                                <p:inplace id="Adres" editor="true">
+                                    <p:inputText value="#{detailsBean.selectedClient.adres}" required="true"/>
+                                </p:inplace>
+
+                                <h:outputLabel for="Dostawca" value="Dostawca:" />
+                                <p:inplace id="Dostawca" editor="true">
+                                    <p:inputText value="#{detailsBean.selectedClient.dostawca}" required="true"/>
+                                </p:inplace>
+
+                                <h:outputLabel for="Produkt" value="Produkt:" />
+                                <p:inplace id="Produkt" editor="true">
+                                    <p:inputText value="#{detailsBean.selectedClient.produkt}" required="true"/>
+                                </p:inplace>
+
+                                <h:outputLabel for="Typ dostawcy" value="Typ dostawcy:" />
+                                <p:inplace id="TypDostawcy" editor="true">
+                                    <p:inputText value="#{detailsBean.selectedClient.typdostawcy}" required="true"/>
+                                </p:inplace>
+                                
+                                <p:commandButton value="Zapisz" action="#{detailsBean.updateCient()}" update=":form:msg"/>
+                            </h:panelGrid>
+                            
                         </p:panel>
-                        
                         <p:commandButton value="Usuń klienta" action="#{detailsBean.deleteClient}">
                             <p:confirm header="Potwierdzenie" message="Czy na pewno?" icon="ui-icon-alert" />
                         </p:commandButton>
