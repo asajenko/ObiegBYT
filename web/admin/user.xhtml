@@ -84,10 +84,18 @@
                                 #{user.rola}
                             </p:column>
                             <p:column width="20">
-                                <p:commandButton icon=" ui-icon-circle-close" immediate="true" action="#{usersBean.deleteUser(user)}" title="Usuń użytkownika" onstart="dlg.show();" oncomplete="dlg.hide();"/>
+                                <p:commandButton icon=" ui-icon-circle-close" immediate="true" action="#{usersBean.deleteUser(user)}" title="Usuń użytkownika" update=":form:usersTable">
+                                    <p:confirm header="Potwierdzenie" message="Czy na pewno?" icon="ui-icon-alert" />
+                                </p:commandButton>
+
+
+
                             </p:column>
                         </p:dataTable>
-
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                            <p:commandButton value="Tak" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                            <p:commandButton value="Nie" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
                         <p:dialog id="addDlg" widgetVar="addDlg">
                             Login: <p:inputText value="#{usersBean.newUser.username}"/><br/>
                             Imię: <p:inputText value="#{usersBean.newUser.firstName}"/><br/>
