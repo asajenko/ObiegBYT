@@ -14,11 +14,14 @@ import javax.persistence.criteria.Root;
 import entities.Users;
 import entities.Client;
 import entities.Invoice;
+import entities.InvoiceFile;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.transaction.UserTransaction;
+import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
 import jpa.exceptions.RollbackFailureException;
 
@@ -38,6 +41,9 @@ public class InvoiceJpaController implements Serializable {
     }
 
     public void create(Invoice invoice) throws RollbackFailureException, Exception {
+        if (invoice.getInvoiceFileList() == null) {
+            invoice.setInvoiceFileList(new ArrayList<InvoiceFile>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -52,6 +58,12 @@ public class InvoiceJpaController implements Serializable {
                 clientId = em.getReference(clientId.getClass(), clientId.getId());
                 invoice.setClientId(clientId);
             }
+            List<InvoiceFile> attachedInvoiceFileList = new ArrayList<InvoiceFile>();
+            for (InvoiceFile invoiceFileListInvoiceFileToAttach : invoice.getInvoiceFileList()) {
+                invoiceFileListInvoiceFileToAttach = em.getReference(invoiceFileListInvoiceFileToAttach.getClass(), invoiceFileListInvoiceFileToAttach.getId());
+                attachedInvoiceFileList.add(invoiceFileListInvoiceFileToAttach);
+            }
+            invoice.setInvoiceFileList(attachedInvoiceFileList);
             em.persist(invoice);
             if (insertedBy != null) {
                 insertedBy.getInvoiceList().add(invoice);
@@ -60,6 +72,15 @@ public class InvoiceJpaController implements Serializable {
             if (clientId != null) {
                 clientId.getInvoiceList().add(invoice);
                 clientId = em.merge(clientId);
+            }
+            for (InvoiceFile invoiceFileListInvoiceFile : invoice.getInvoiceFileList()) {
+                Invoice oldInvoiceIdOfInvoiceFileListInvoiceFile = invoiceFileListInvoiceFile.getInvoiceId();
+                invoiceFileListInvoiceFile.setInvoiceId(invoice);
+                invoiceFileListInvoiceFile = em.merge(invoiceFileListInvoiceFile);
+                if (oldInvoiceIdOfInvoiceFileListInvoiceFile != null) {
+                    oldInvoiceIdOfInvoiceFileListInvoiceFile.getInvoiceFileList().remove(invoiceFileListInvoiceFile);
+                    oldInvoiceIdOfInvoiceFileListInvoiceFile = em.merge(oldInvoiceIdOfInvoiceFileListInvoiceFile);
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -76,7 +97,7 @@ public class InvoiceJpaController implements Serializable {
         }
     }
 
-    public void edit(Invoice invoice) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(Invoice invoice) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -86,6 +107,20 @@ public class InvoiceJpaController implements Serializable {
             Users insertedByNew = invoice.getInsertedBy();
             Client clientIdOld = persistentInvoice.getClientId();
             Client clientIdNew = invoice.getClientId();
+            List<InvoiceFile> invoiceFileListOld = persistentInvoice.getInvoiceFileList();
+            List<InvoiceFile> invoiceFileListNew = invoice.getInvoiceFileList();
+            List<String> illegalOrphanMessages = null;
+            for (InvoiceFile invoiceFileListOldInvoiceFile : invoiceFileListOld) {
+                if (!invoiceFileListNew.contains(invoiceFileListOldInvoiceFile)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain InvoiceFile " + invoiceFileListOldInvoiceFile + " since its invoiceId field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
             if (insertedByNew != null) {
                 insertedByNew = em.getReference(insertedByNew.getClass(), insertedByNew.getUserId());
                 invoice.setInsertedBy(insertedByNew);
@@ -94,6 +129,13 @@ public class InvoiceJpaController implements Serializable {
                 clientIdNew = em.getReference(clientIdNew.getClass(), clientIdNew.getId());
                 invoice.setClientId(clientIdNew);
             }
+            List<InvoiceFile> attachedInvoiceFileListNew = new ArrayList<InvoiceFile>();
+            for (InvoiceFile invoiceFileListNewInvoiceFileToAttach : invoiceFileListNew) {
+                invoiceFileListNewInvoiceFileToAttach = em.getReference(invoiceFileListNewInvoiceFileToAttach.getClass(), invoiceFileListNewInvoiceFileToAttach.getId());
+                attachedInvoiceFileListNew.add(invoiceFileListNewInvoiceFileToAttach);
+            }
+            invoiceFileListNew = attachedInvoiceFileListNew;
+            invoice.setInvoiceFileList(invoiceFileListNew);
             invoice = em.merge(invoice);
             if (insertedByOld != null && !insertedByOld.equals(insertedByNew)) {
                 insertedByOld.getInvoiceList().remove(invoice);
@@ -110,6 +152,17 @@ public class InvoiceJpaController implements Serializable {
             if (clientIdNew != null && !clientIdNew.equals(clientIdOld)) {
                 clientIdNew.getInvoiceList().add(invoice);
                 clientIdNew = em.merge(clientIdNew);
+            }
+            for (InvoiceFile invoiceFileListNewInvoiceFile : invoiceFileListNew) {
+                if (!invoiceFileListOld.contains(invoiceFileListNewInvoiceFile)) {
+                    Invoice oldInvoiceIdOfInvoiceFileListNewInvoiceFile = invoiceFileListNewInvoiceFile.getInvoiceId();
+                    invoiceFileListNewInvoiceFile.setInvoiceId(invoice);
+                    invoiceFileListNewInvoiceFile = em.merge(invoiceFileListNewInvoiceFile);
+                    if (oldInvoiceIdOfInvoiceFileListNewInvoiceFile != null && !oldInvoiceIdOfInvoiceFileListNewInvoiceFile.equals(invoice)) {
+                        oldInvoiceIdOfInvoiceFileListNewInvoiceFile.getInvoiceFileList().remove(invoiceFileListNewInvoiceFile);
+                        oldInvoiceIdOfInvoiceFileListNewInvoiceFile = em.merge(oldInvoiceIdOfInvoiceFileListNewInvoiceFile);
+                    }
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -133,7 +186,7 @@ public class InvoiceJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -144,6 +197,17 @@ public class InvoiceJpaController implements Serializable {
                 invoice.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The invoice with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            List<InvoiceFile> invoiceFileListOrphanCheck = invoice.getInvoiceFileList();
+            for (InvoiceFile invoiceFileListOrphanCheckInvoiceFile : invoiceFileListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Invoice (" + invoice + ") cannot be destroyed since the InvoiceFile " + invoiceFileListOrphanCheckInvoiceFile + " in its invoiceFileList field has a non-nullable invoiceId field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Users insertedBy = invoice.getInsertedBy();
             if (insertedBy != null) {

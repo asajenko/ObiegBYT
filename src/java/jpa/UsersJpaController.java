@@ -14,8 +14,9 @@ import entities.Groups;
 import java.util.ArrayList;
 import java.util.Collection;
 import entities.Invoice;
-import entities.Users;
 import java.util.List;
+import entities.Document;
+import entities.Users;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -46,6 +47,9 @@ public class UsersJpaController implements Serializable {
         if (users.getInvoiceList() == null) {
             users.setInvoiceList(new ArrayList<Invoice>());
         }
+        if (users.getDocumentList() == null) {
+            users.setDocumentList(new ArrayList<Document>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -62,6 +66,12 @@ public class UsersJpaController implements Serializable {
                 attachedInvoiceList.add(invoiceListInvoiceToAttach);
             }
             users.setInvoiceList(attachedInvoiceList);
+            List<Document> attachedDocumentList = new ArrayList<Document>();
+            for (Document documentListDocumentToAttach : users.getDocumentList()) {
+                documentListDocumentToAttach = em.getReference(documentListDocumentToAttach.getClass(), documentListDocumentToAttach.getId());
+                attachedDocumentList.add(documentListDocumentToAttach);
+            }
+            users.setDocumentList(attachedDocumentList);
             em.persist(users);
             for (Groups groupsCollectionGroups : users.getGroupsCollection()) {
                 groupsCollectionGroups.getUsersCollection().add(users);
@@ -74,6 +84,15 @@ public class UsersJpaController implements Serializable {
                 if (oldInsertedByOfInvoiceListInvoice != null) {
                     oldInsertedByOfInvoiceListInvoice.getInvoiceList().remove(invoiceListInvoice);
                     oldInsertedByOfInvoiceListInvoice = em.merge(oldInsertedByOfInvoiceListInvoice);
+                }
+            }
+            for (Document documentListDocument : users.getDocumentList()) {
+                Users oldInsertedByOfDocumentListDocument = documentListDocument.getInsertedBy();
+                documentListDocument.setInsertedBy(users);
+                documentListDocument = em.merge(documentListDocument);
+                if (oldInsertedByOfDocumentListDocument != null) {
+                    oldInsertedByOfDocumentListDocument.getDocumentList().remove(documentListDocument);
+                    oldInsertedByOfDocumentListDocument = em.merge(oldInsertedByOfDocumentListDocument);
                 }
             }
             em.getTransaction().commit();
@@ -101,6 +120,8 @@ public class UsersJpaController implements Serializable {
             Collection<Groups> groupsCollectionNew = users.getGroupsCollection();
             List<Invoice> invoiceListOld = persistentUsers.getInvoiceList();
             List<Invoice> invoiceListNew = users.getInvoiceList();
+            List<Document> documentListOld = persistentUsers.getDocumentList();
+            List<Document> documentListNew = users.getDocumentList();
             Collection<Groups> attachedGroupsCollectionNew = new ArrayList<Groups>();
             for (Groups groupsCollectionNewGroupsToAttach : groupsCollectionNew) {
                 groupsCollectionNewGroupsToAttach = em.getReference(groupsCollectionNewGroupsToAttach.getClass(), groupsCollectionNewGroupsToAttach.getGroupId());
@@ -115,6 +136,13 @@ public class UsersJpaController implements Serializable {
             }
             invoiceListNew = attachedInvoiceListNew;
             users.setInvoiceList(invoiceListNew);
+            List<Document> attachedDocumentListNew = new ArrayList<Document>();
+            for (Document documentListNewDocumentToAttach : documentListNew) {
+                documentListNewDocumentToAttach = em.getReference(documentListNewDocumentToAttach.getClass(), documentListNewDocumentToAttach.getId());
+                attachedDocumentListNew.add(documentListNewDocumentToAttach);
+            }
+            documentListNew = attachedDocumentListNew;
+            users.setDocumentList(documentListNew);
             users = em.merge(users);
             for (Groups groupsCollectionOldGroups : groupsCollectionOld) {
                 if (!groupsCollectionNew.contains(groupsCollectionOldGroups)) {
@@ -142,6 +170,23 @@ public class UsersJpaController implements Serializable {
                     if (oldInsertedByOfInvoiceListNewInvoice != null && !oldInsertedByOfInvoiceListNewInvoice.equals(users)) {
                         oldInsertedByOfInvoiceListNewInvoice.getInvoiceList().remove(invoiceListNewInvoice);
                         oldInsertedByOfInvoiceListNewInvoice = em.merge(oldInsertedByOfInvoiceListNewInvoice);
+                    }
+                }
+            }
+            for (Document documentListOldDocument : documentListOld) {
+                if (!documentListNew.contains(documentListOldDocument)) {
+                    documentListOldDocument.setInsertedBy(null);
+                    documentListOldDocument = em.merge(documentListOldDocument);
+                }
+            }
+            for (Document documentListNewDocument : documentListNew) {
+                if (!documentListOld.contains(documentListNewDocument)) {
+                    Users oldInsertedByOfDocumentListNewDocument = documentListNewDocument.getInsertedBy();
+                    documentListNewDocument.setInsertedBy(users);
+                    documentListNewDocument = em.merge(documentListNewDocument);
+                    if (oldInsertedByOfDocumentListNewDocument != null && !oldInsertedByOfDocumentListNewDocument.equals(users)) {
+                        oldInsertedByOfDocumentListNewDocument.getDocumentList().remove(documentListNewDocument);
+                        oldInsertedByOfDocumentListNewDocument = em.merge(oldInsertedByOfDocumentListNewDocument);
                     }
                 }
             }
@@ -188,6 +233,11 @@ public class UsersJpaController implements Serializable {
             for (Invoice invoiceListInvoice : invoiceList) {
                 invoiceListInvoice.setInsertedBy(null);
                 invoiceListInvoice = em.merge(invoiceListInvoice);
+            }
+            List<Document> documentList = users.getDocumentList();
+            for (Document documentListDocument : documentList) {
+                documentListDocument.setInsertedBy(null);
+                documentListDocument = em.merge(documentListDocument);
             }
             em.remove(users);
             em.getTransaction().commit();
@@ -265,4 +315,5 @@ public class UsersJpaController implements Serializable {
             em.close();
         }
     }
+
 }
