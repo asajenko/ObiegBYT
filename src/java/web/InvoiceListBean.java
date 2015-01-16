@@ -54,6 +54,14 @@ public class InvoiceListBean {
         clients = cjc.findClientEntities();
     }
 
+    public UploadedFile getSelectedFile() {
+        return selectedFile;
+    }
+
+    public void setSelectedFile(UploadedFile selectedFile) {
+        this.selectedFile = selectedFile;
+    }
+
     public List<Invoice> getInvoices() {
         return invoices;
     }
