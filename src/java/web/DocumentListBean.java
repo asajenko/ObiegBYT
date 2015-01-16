@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -41,12 +42,11 @@ public class DocumentListBean {
     private Document newDocument = new Document();
     private DocumentFileJpaController dfjc = new DocumentFileJpaController();
     private UploadedFile selectedFile;
-    private List<Client> clients = new ArrayList<Client>();
-    private ClientJpaController cjc = new ClientJpaController();
+     @ManagedProperty(value = "#{" + SessionBean.BEAN_NAME + "}")
+    private SessionBean sessionBean;
 
     public DocumentListBean() {
         documents = djc.findDocumentEntities();
-        clients = cjc.findClientEntities();
     }
 
     public UploadedFile getSelectedFile() {
@@ -55,14 +55,6 @@ public class DocumentListBean {
 
     public void setSelectedFile(UploadedFile selectedFile) {
         this.selectedFile = selectedFile;
-    }
-
-    public List<Client> getClients() {
-        return clients;
-    }
-
-    public void setClients(List<Client> clients) {
-        this.clients = clients;
     }
 
     public List<Document> getDocuments() {
@@ -113,6 +105,8 @@ public class DocumentListBean {
 
     public void createDocument() {
         try {
+            newDocument.setInserted(new Date());
+            newDocument.setInsertedBy(sessionBean.getZalogowany());
             djc.create(newDocument);
             for (UploadedFile f : uploadedFiles) {
                 String filePath = saveFile(f, "C:\\obiegfiles");
@@ -157,9 +151,17 @@ public class DocumentListBean {
         ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String appCtx = servletContext.getContextPath();
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(appCtx + "/system/details.xhtml?id=" + id);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(appCtx + "/system/document_details.xhtml?id=" + id);
         } catch (IOException ex) {
             Logger.getLogger(DocumentListBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+        public SessionBean getSessionBean() {
+        return sessionBean;
+    }
+
+    public void setSessionBean(SessionBean sessionBean) {
+        this.sessionBean = sessionBean;
     }
 }
