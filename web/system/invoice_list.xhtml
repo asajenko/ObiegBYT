@@ -78,13 +78,17 @@
                                 #{invoice.clientId.dostawca}
                             </p:column>
                             <p:column headerText="Data dodania">
-                                #{invoice.inserted}
+                                <h:outputText value="#{invoice.inserted}">
+                                    <f:converter converterId="web.DateConverterNotHours"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Osoba dodająca">
                                 #{invoice.insertedBy}
                             </p:column>
                             <p:column headerText="Termin płatności">
-                                #{invoice.terminPlatnosci}
+                                <h:outputText value="#{invoice.terminPlatnosci}">
+                                    <f:converter converterId="web.DateConverterNotHours"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Data wystawienia">
                                 #{invoice.terminWystawienia}
