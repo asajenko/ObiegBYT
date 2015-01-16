@@ -53,7 +53,7 @@
                     </div>
                     <div id="menubar">
                         <ul id="menu">
-                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci"/></li>
+                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci" rendered="#{sessionBean.isSekretariat or sessionBean.isZarzad}"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="invoicelist" value="Lista faktur"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="documentlist" value="Lista dokumentów"/></li>
                             <li><h:commandLink value="Wyloguj" action="#{loginBackup.logout}" immediate="true" /></li>
@@ -67,8 +67,8 @@
 
                     <div id="content">
                         <p:growl id="msg" showDetail="true" sticky="true"/>
-                        <p:commandButton onclick="PF('addDlg').show();" value="Stwórz kontrahenta"/>
-                        <p:dataTable value="#{listBean.clients}" var="client" id="clientTable">
+                        <p:commandButton onclick="PF('addDlg').show();" value="Stwórz kontrahenta" rendered="#{sessionBean.isSekretariat}"/>
+                        <p:dataTable value="#{listBean.clients}" var="client" id="clientTable" rendered="#{sessionBean.isSekretariat}">
 
                             <p:column headerText="ID">
                                 #{client.id}

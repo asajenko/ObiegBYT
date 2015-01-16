@@ -53,7 +53,7 @@
                     </div>
                     <div id="menubar">
                         <ul id="menu">
-                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci"/></li>
+                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci" rendered="#{sessionBean.isSekretariat or sessionBean.isZarzad}"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="invoicelist" value="Lista faktur"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="documentlist" value="Lista dokumentów"/></li>
                             <li><h:commandLink value="Wyloguj" action="#{loginBackup.logout}" immediate="true" /></li>
@@ -97,17 +97,17 @@
 
                         <p:dialog id="addDlg" widgetVar="addDlg" header="Wpisz dane">
                             <h:panelGrid columns="2" columnClasses="column" cellpadding="5" >
-                            Login: <p:inputText value="#{usersBean.newUser.username}"/><br/>
-                            Imię: <p:inputText value="#{usersBean.newUser.firstName}"/><br/>
-                            Nazwisko: <p:inputText value="#{usersBean.newUser.lastName}"/><br/>
-                            Admin: <p:selectBooleanCheckbox value="#{usersBean.admin}"/><br/>
-                            Rola:
-                            <p:selectOneMenu value="#{usersBean.newUser.rola}">
-                                <f:selectItem itemLabel="Użytkownik" itemValue="Użytkownik"/>
-                                <f:selectItem itemLabel="Księgowość" itemValue="Księgowość"/>
-                                <f:selectItem itemLabel="Sekretariat" itemValue="Sekretariat"/>
-                                <f:selectItem itemLabel="Zarząd" itemValue="Zarząd"/>
-                            </p:selectOneMenu><br/>
+                                Login: <p:inputText value="#{usersBean.newUser.username}"/><br/>
+                                Imię: <p:inputText value="#{usersBean.newUser.firstName}"/><br/>
+                                Nazwisko: <p:inputText value="#{usersBean.newUser.lastName}"/><br/>
+                                Admin: <p:selectBooleanCheckbox value="#{usersBean.admin}"/><br/>
+                                Rola:
+                                <p:selectOneMenu value="#{usersBean.newUser.rola}">
+                                    <f:selectItem itemLabel="Użytkownik" itemValue="Użytkownik"/>
+                                    <f:selectItem itemLabel="Księgowość" itemValue="Księgowość"/>
+                                    <f:selectItem itemLabel="Sekretariat" itemValue="Sekretariat"/>
+                                    <f:selectItem itemLabel="Zarząd" itemValue="Zarząd"/>
+                                </p:selectOneMenu><br/>
                             </h:panelGrid>
                             <p:commandButton value="Dodaj" action="#{usersBean.createUser()}" update=":form:usersTable" oncomplete="PF('addDlg').hide();"/>
                         </p:dialog>

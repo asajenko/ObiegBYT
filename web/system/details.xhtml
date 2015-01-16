@@ -54,7 +54,7 @@
                     </div>
                     <div id="menubar">
                         <ul id="menu">
-                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci"/></li>
+                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci" rendered="#{sessionBean.isSekretariat or sessionBean.isZarzad}"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="invoicelist" value="Lista faktur"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="documentlist" value="Lista dokumentów"/></li>
                             <li><h:commandLink value="Wyloguj" action="#{loginBackup.logout}" immediate="true" /></li>

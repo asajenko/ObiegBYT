@@ -54,7 +54,7 @@
                     </div>
                     <div id="menubar">
                         <ul id="menu">
-                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci"/></li>
+                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci" rendered="#{sessionBean.isSekretariat or sessionBean.isZarzad}"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="invoicelist" value="Lista faktur"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="documentlist" value="Lista dokumentów"/></li>
                             <li><h:commandLink value="Wyloguj" action="#{loginBackup.logout}" immediate="true" /></li>
@@ -90,25 +90,22 @@
                                 <p:inplace id="Termin_platnosci" editor="true">
                                     <p:calendar value="#{invoiceDetailsBean.selectedInvoice.terminPlatnosci}"/>
                                 </p:inplace>
-                                
+
                                 <h:outputLabel for="Data_wystawienia" value="Data wystawienia:"/>
                                 <p:inplace id="Data_wystawienia" editor="true">
                                     <p:calendar value="#{invoiceDetailsBean.selectedInvoice.terminWystawienia}"/>
                                 </p:inplace>
 
+                                <h:outputLabel value="Opis merytoryczny:"/>
+                                <h:inputTextarea value="#{invoiceDetailsBean.selectedInvoice.merytoryczny}" disabled="#{sessionBean.isUzytkownik == false and sessionBean.isKsiegowosc == false and sessionBean.isZarzad == false}" cols="50" rows="3"/>
+
+                                <h:outputLabel value="Opis Rachunkowy:"/>
+                                <h:inputTextarea value="#{invoiceDetailsBean.selectedInvoice.rachunkowy}" disabled="#{sessionBean.isKsiegowosc == false and sessionBean.isZarzad == false}" cols="50" rows="3"/>
+
                                 <p:commandButton value="Zapisz" action="#{invoiceDetailsBean.updateInvoice()}" update=":form:msg"/>
                             </h:panelGrid>
 
                         </p:panel>
-                        <p:commandButton value="Usuń klienta" action="#{detailsBean.deleteClient}">
-                            <p:confirm header="Potwierdzenie" message="Czy na pewno?" icon="ui-icon-alert" />
-                        </p:commandButton>
-
-                        <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
-                            <p:commandButton value="Tak" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" action="#{detailsBean.goToIndex}" />
-                            <p:commandButton value="Nie" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                        </p:confirmDialog>
-
                     </div>
                 </div>
                 <div id="footer">Copyright &copy; SajFly All Rights Reserved.</div>

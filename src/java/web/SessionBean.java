@@ -29,6 +29,66 @@ public class SessionBean implements Serializable {
     private List<TransactionStates> transactionStates = null;
     private TransactionStatesJpaController tsjc = new TransactionStatesJpaController();
     private Boolean isAdmin = null;
+    private boolean isKsiegowosc;
+    private boolean isZarzad;
+    private boolean isSekretariat;
+    private boolean isUzytkownik;
+
+    public boolean isIsKsiegowosc() {
+        if (getZalogowany() != null && getZalogowany().getRola() != null && getZalogowany().getRola().equalsIgnoreCase("Księgowość")) {
+            isKsiegowosc = true;
+            return true;
+        } else {
+            isKsiegowosc = false;
+            return false;
+        }
+    }
+
+    public void setIsKsiegowosc(boolean isKsiegowosc) {
+        this.isKsiegowosc = isKsiegowosc;
+    }
+
+    public boolean isIsZarzad() {
+        if (getZalogowany() != null && getZalogowany().getRola() != null && getZalogowany().getRola().equalsIgnoreCase("Zarząd")) {
+            isZarzad = true;
+            return true;
+        } else {
+            isZarzad = false;
+            return false;
+        }
+    }
+
+    public void setIsZarzad(boolean isZarzad) {
+        this.isZarzad = isZarzad;
+    }
+
+    public boolean isIsSekretariat() {
+        if (getZalogowany() != null && getZalogowany().getRola() != null && getZalogowany().getRola().equalsIgnoreCase("Sekretariat")) {
+            isSekretariat = true;
+            return true;
+        } else {
+            isSekretariat = false;
+            return false;
+        }
+    }
+
+    public void setIsSekretariat(boolean isSekretariat) {
+        this.isSekretariat = isSekretariat;
+    }
+
+    public boolean isIsUzytkownik() {
+        if (getZalogowany() != null && getZalogowany().getRola() != null && getZalogowany().getRola().equalsIgnoreCase("Użytkownik")) {
+            isUzytkownik = true;
+            return true;
+        } else {
+            isUzytkownik = false;
+            return false;
+        }
+    }
+
+    public void setIsUzytkownik(boolean isUzytkownik) {
+        this.isUzytkownik = isUzytkownik;
+    }
 
     public Boolean getIsAdmin() {
         if (isAdmin == null) {
