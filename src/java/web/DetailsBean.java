@@ -100,7 +100,7 @@ public class DetailsBean implements Serializable {
         this.newContent = newContent;
     }
 
-    public void addNewNote() {
+  /*  public void addNewNote() {
         try {
             Note note = new Note();
             note.setClientId(selectedClient);
@@ -145,7 +145,7 @@ public class DetailsBean implements Serializable {
             Logger.getLogger(DetailsBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+*/
     public String getStateName(int id) {
         for (TransactionStates state : sessionBean.getTransactionStates()) {
             if (state.getId() == id) {

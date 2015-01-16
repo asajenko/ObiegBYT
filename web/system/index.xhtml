@@ -103,7 +103,7 @@
                             Dostawca: <p:inputText value="#{listBean.newClient.dostawca}"/><br/>
                             Produkt: <p:inputText value="#{listBean.newClient.produkt}"/><br/>
                             Typ dostawcy: <p:inputText value="#{listBean.newClient.typdostawcy}"/><br/>
-                            <p:commandButton value="Dodaj" action="#{listBean.createClient()}" update=":form:clientTable" oncomplete="PF('addDlg').hide();"/>
+                            <p:commandButton value="Dodaj" action="#{listBean.createClient()}" update=":form:clientTable msg" oncomplete="PF('addDlg').hide();"/>
                         </p:dialog>
                     </div>
                 </div>
