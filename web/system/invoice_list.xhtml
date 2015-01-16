@@ -71,10 +71,10 @@
                         <p:commandButton onclick="PF('addDlg').show();" value="Stwórz fakture"/>
                         <p:dataTable value="#{invoiceListBean.invoices}" var="invoice" id="invoiceTable">
 
-                            <p:column headerText="Nr faktury">
+                            <p:column headerText="Nr faktury" filterBy="#{invoice.number}" filterMatchMode="contains" sortBy="#{invoice.number}">
                                 #{invoice.number}
                             </p:column>
-                            <p:column headerText="Dostawca">
+                            <p:column headerText="Dostawca" filterBy="#{invoice.clientId.dostawca}" filterMatchMode="contains">
                                 #{invoice.clientId.dostawca}
                             </p:column>
                             <p:column headerText="Data dodania">
@@ -82,7 +82,7 @@
                                     <f:converter converterId="web.DateConverterNotHours"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Osoba dodająca">
+                            <p:column headerText="Osoba dodająca" filterBy="#{invoice.insertedBy.lastName}" filterMatchMode="contains">
                                 #{invoice.insertedBy.firstName}
                                 #{invoice.insertedBy.lastName}
                             </p:column>
@@ -94,7 +94,7 @@
                             <p:column headerText="Data wystawienia">
                                 #{invoice.terminWystawienia}
                             </p:column>
-                            <p:column headerText="Kwota brutto">
+                            <p:column headerText="Kwota brutto" filterBy="#{invoice.brutto}" filterMatchMode="contains">
                                 #{invoice.brutto}
                             </p:column>
                             <p:column headerText="Akcje">

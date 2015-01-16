@@ -70,7 +70,7 @@
 
                         <p:commandButton onclick="PF('addDlg').show();" value="Stwórz dokument"/>
                         <p:dataTable value="#{documentListBean.documents}" var="document" id="documentTable">
-                            <p:column headerText="Nr dokumentu">
+                            <p:column headerText="Nr dokumentu" filterBy="#{document.number}" filterMatchMode="contains" sortBy="#{document.number}">
                                 #{document.number}
                             </p:column>
                             <p:column headerText="Data dostarczenia">
@@ -80,14 +80,14 @@
                             </p:column>
                             <p:column headerText="Data dodania">
                                 <h:outputText value="#{document.inserted}">
-                                <f:converter converterId="web.DateConverterNotHours"/>
+                                    <f:converter converterId="web.DateConverterNotHours"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Osoba dodająca">
+                            <p:column headerText="Osoba dodająca" filterBy="#{document.insertedBy.lastName}" filterMatchMode="contains">
                                 #{document.insertedBy.firstName}
                                 #{document.insertedBy.lastName}
                             </p:column>
-                            <p:column headerText="Nadawca">
+                            <p:column headerText="Nadawca" filterBy="#{document.nadawca}" filterMatchMode="contains">
                                 #{document.nadawca}
                             </p:column>
                             <p:column headerText="Akcje">
