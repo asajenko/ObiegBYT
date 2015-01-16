@@ -56,7 +56,7 @@
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="invoicelist" value="Lista faktur"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="documentlist" value="Lista dokumentów"/></li>
-                            <li><p:commandLink value="Wyloguj" action="#{loginBackup.logout}"/></li>
+                            <li><h:commandLink value="Wyloguj" action="#{loginBackup.logout}" immediate="true" /></li>
                         </ul>
                         <ul id="menuhelp">
                             <li><a href="${applicationBackup.appCtx}/admin/user.xhtml" align ="right">Użytkownicy</a></li>

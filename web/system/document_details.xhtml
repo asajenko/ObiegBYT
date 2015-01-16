@@ -57,7 +57,7 @@
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="invoicelist" value="Lista faktur"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="documentlist" value="Lista dokumentów"/></li>
-                            <li><p:commandLink value="Wyloguj" action="#{loginBackup.logout}"/></li>
+                            <li><h:commandLink value="Wyloguj" action="#{loginBackup.logout}" immediate="true" /></li>
                         </ul>
                         <ul id="menuhelp">
                             <li><a href="${applicationBackup.appCtx}/admin/user.xhtml" align ="right">Użytkownicy</a></li>
@@ -75,12 +75,9 @@
                                 <p:inplace id="Number" editor="true">
                                     <p:inputText value="#{documentDetailsBean.selectedDocument.number}" required="true"/>
                                 </p:inplace>
-
-                                <h:outputLabel for="dataDostarczenia" value="Data Dostarczenia" />
-                                <p:inplace id="dataDostarczenia" editor="true">
-                                    <p:calendar value="#{documentDetailsBean.selectedDocument.dataDostarczenia}" required="true"/>
-                                </p:inplace>
-
+                                <h:outputLabel for="dataDostarczenia" value="Data Dostarczenia"/> 
+                                <p:calendar value="#{documentDetailsBean.selectedDocument.dataDostarczenia}" required="true">
+                                </p:calendar>
                                 <h:outputLabel for="Nadawca" value="Nadawca"/>
                                 <p:inplace id="Nadawca" editor="true">
                                     <p:inputText value="#{documentDetailsBean.selectedDocument.nadawca}"/>

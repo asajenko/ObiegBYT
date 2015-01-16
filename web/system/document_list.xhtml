@@ -56,7 +56,7 @@
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="invoicelist" value="Lista faktur"/></li>
                             <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="documentlist" value="Lista dokumentów"/></li>
-                            <li><p:commandLink value="Wyloguj" action="#{loginBackup.logout}"/></li>
+                            <li><h:commandLink value="Wyloguj" action="#{loginBackup.logout}" immediate="true" /></li>
                         </ul>
                         <ul id="menuhelp">
                             <li><a href="${applicationBackup.appCtx}/admin/user.xhtml" align ="right">Użytkownicy</a></li>
@@ -74,10 +74,14 @@
                                 #{document.number}
                             </p:column>
                             <p:column headerText="Data dostarczenia">
-                                #{document.dataDostarczenia}
+                                <h:outputText value="#{document.dataDostarczenia}">
+                                    <f:converter converterId="web.DateConverterNotHours"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Data dodania">
-                                #{document.inserted}
+                                <h:outputText value="#{document.inserted}">
+                                <f:converter converterId="web.DateConverterNotHours"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Osoba dodająca">
                                 #{document.insertedBy.firstName}

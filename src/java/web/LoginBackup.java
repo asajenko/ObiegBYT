@@ -40,7 +40,7 @@ public class LoginBackup implements Serializable {
         ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String appCtx = servletContext.getContextPath();
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(appCtx + "/logout.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(appCtx + "/system/logout.xhtml");
         } catch (IOException ex) {
             Logger.getLogger(LoginBackup.class.getName()).log(Level.SEVERE, null, ex);
         }
