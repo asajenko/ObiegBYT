@@ -97,13 +97,15 @@
                         </p:dataTable>
 
                         <p:dialog id="addDlg" widgetVar="addDlg">
-                            Numer: <p:inputText value="#{listBean.newClient.number}"/><br/>
-                            Adres: <p:inputText value="#{listBean.newClient.adres}"/><br/>
-                            Email: <p:inputText value="#{listBean.newClient.email}"/><br/>
-                            Dostawca: <p:inputText value="#{listBean.newClient.dostawca}"/><br/>
-                            Produkt: <p:inputText value="#{listBean.newClient.produkt}"/><br/>
-                            Typ dostawcy: <p:inputText value="#{listBean.newClient.typdostawcy}"/><br/>
-                            <p:commandButton value="Dodaj" action="#{listBean.createClient()}" update=":form:clientTable msg" oncomplete="PF('addDlg').hide();"/>
+                            <h:panelGrid columns="2" columnClasses="column" cellpadding="5" >
+                                Numer: <p:inputText value="#{listBean.newClient.number}"/><br/>
+                                Adres: <p:inputText value="#{listBean.newClient.adres}"/><br/>
+                                Email: <p:inputText value="#{listBean.newClient.email}"/><br/>
+                                Dostawca: <p:inputText value="#{listBean.newClient.dostawca}"/><br/>
+                                Produkt: <p:inputText value="#{listBean.newClient.produkt}"/><br/>
+                                Typ dostawcy: <p:inputText value="#{listBean.newClient.typdostawcy}"/><br/>
+                                <p:commandButton value="Dodaj" action="#{listBean.createClient()}" update=":form:clientTable msg" oncomplete="PF('addDlg').hide();"/>
+                            </h:panelGrid>
                         </p:dialog>
                     </div>
                 </div>

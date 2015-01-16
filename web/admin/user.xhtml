@@ -6,7 +6,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>SajFly Obieg dokumentów/title>
+        <title>SajFly Obieg dokumentów</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="${applicationBackup.appCtx}/style/style.css" />
     </h:head>
@@ -95,7 +95,8 @@
                             <p:commandButton value="Nie" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                         </p:confirmDialog>
 
-                        <p:dialog id="addDlg" widgetVar="addDlg">
+                        <p:dialog id="addDlg" widgetVar="addDlg" header="Wpisz dane">
+                            <h:panelGrid columns="2" columnClasses="column" cellpadding="5" >
                             Login: <p:inputText value="#{usersBean.newUser.username}"/><br/>
                             Imię: <p:inputText value="#{usersBean.newUser.firstName}"/><br/>
                             Nazwisko: <p:inputText value="#{usersBean.newUser.lastName}"/><br/>
@@ -107,6 +108,7 @@
                                 <f:selectItem itemLabel="Sekretariat" itemValue="Sekretariat"/>
                                 <f:selectItem itemLabel="Zarząd" itemValue="Zarząd"/>
                             </p:selectOneMenu><br/>
+                            </h:panelGrid>
                             <p:commandButton value="Dodaj" action="#{usersBean.createUser()}" update=":form:usersTable" oncomplete="PF('addDlg').hide();"/>
                         </p:dialog>
 
