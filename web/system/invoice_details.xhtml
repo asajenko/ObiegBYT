@@ -69,15 +69,15 @@
                         <p:growl id="msg" showDetail="true" sticky="true"/>
                         <h:inputHidden value="#{invoiceDetailsBean.filtr}"/>
                         <h:inputHidden value="#{invoiceDetailsBean.selectedInvoice.id}"/>
-                        <p:panel header="Edycja klienta: #{detailsBean.selectedClient.dostawca}">
+                        <p:panel header="Edycja faktury: #{invoiceDetailsBean.selectedInvoice.id}">
                             <h:panelGrid columns="2" columnClasses="column" cellpadding="5" >
-                                <h:outputLabel for="Numer" value="Numer:" />
-                                <p:inplace id="numer" editor="true">
+                                <h:outputLabel for="Number" value="Numer:" />
+                                <p:inplace id="Number" editor="true">
                                     <p:inputText value="#{invoiceDetailsBean.selectedInvoice.number}" required="true"/>
                                 </p:inplace>
 
-                                <h:outputLabel for="Dostawca" value="Dostawca:" />
-                                <p:inplace id="E-Mail" editor="true">
+                                <h:outputLabel for="clientId" value="Dostawca:" />
+                                <p:inplace id="clientId" editor="true">
                                     <p:inputText value="#{invoiceDetailsBean.selectedInvoice.clientId.dostawca}" required="true"/>
                                 </p:inplace>
 

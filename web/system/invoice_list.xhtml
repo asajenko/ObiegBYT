@@ -104,13 +104,13 @@
                         </p:dataTable>
                         <p:dialog id="addDlg" widgetVar="addDlg" header="Wpisz dane">
                             <h:panelGrid columns="2" columnClasses="column" cellpadding="5" >
-                                Numer: <p:inputText value="#{invoiceListBean.newInvoice.number}"/><br/>
+                                Numer: <p:inputText value="#{invoiceListBean.newInvoice.number}" required="true"/><br/>
                                 Dostawca: 
                                 <p:selectOneMenu value="#{invoiceListBean.newInvoice.clientId}" converter="#{clientConverter}">
                                     <f:selectItems value="#{invoiceListBean.clients}" var="client" itemLabel="#{client.dostawca}" itemValue="#{client}"/>
                                 </p:selectOneMenu><br/>
-                                Termin płatności: <p:calendar value="#{invoiceListBean.newInvoice.terminPlatnosci}"/><br/>
-                                Termin wystawienia: <p:calendar value="#{invoiceListBean.newInvoice.terminWystawienia}"/><br/>
+                                Termin płatności: <p:calendar value="#{invoiceListBean.newInvoice.terminPlatnosci}" required="true"/><br/>
+                                Termin wystawienia: <p:calendar value="#{invoiceListBean.newInvoice.terminWystawienia}" required="true"/><br/>
                                 <p:panel header="Pliki" id="fPanel">
                                     <p:fileUpload fileUploadListener="#{invoiceListBean.uploadListener}" multiple="true" label="Wybierz" auto="true" mode="advanced" update="fileList"/>
                                     <p:dataGrid var="file" value="#{invoiceListBean.uploadedFiles}" columns="2"
