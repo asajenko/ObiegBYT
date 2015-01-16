@@ -7,6 +7,7 @@ package web;
 import entities.Client;
 import entities.Invoice;
 import entities.InvoiceFile;
+import entities.Users;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -126,6 +127,8 @@ public class InvoiceListBean {
 
     public void createInvoice() {
         try {
+            newInvoice.setInserted(new Date());
+            newInvoice.setInsertedBy(sessionBean.getZalogowany());
             ijc.create(newInvoice);
             for (UploadedFile f : uploadedFiles) {
                 String filePath = saveFile(f, "C:\\obiegfiles");
@@ -170,7 +173,7 @@ public class InvoiceListBean {
         ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String appCtx = servletContext.getContextPath();
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(appCtx + "/system/details.xhtml?id=" + id);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(appCtx + "/system/invoice_details.xhtml?id=" + id);
         } catch (IOException ex) {
             Logger.getLogger(InvoiceListBean.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -83,7 +83,8 @@
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="Osoba dodająca">
-                                #{invoice.insertedBy}
+                                #{invoice.insertedBy.firstName}
+                                #{invoice.insertedBy.lastName}
                             </p:column>
                             <p:column headerText="Termin płatności">
                                 <h:outputText value="#{invoice.terminPlatnosci}">
@@ -95,6 +96,9 @@
                             </p:column>
                             <p:column headerText="Kwota brutto">
                                 #{invoice.brutto}
+                            </p:column>
+                            <p:column headerText="Akcje">
+                                <p:commandButton icon="ui-icon ui-icon-search" action="#{invoiceListBean.goToDetails(invoice.id)}" title="Szczegóły" onstart="dlg.show();" oncomplete="dlg.hide();" immediate="true"/>
                             </p:column>
 
                         </p:dataTable>

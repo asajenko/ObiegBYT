@@ -304,7 +304,7 @@ public class UsersJpaController implements Serializable {
     public Users findUserByLogin(String login) {
         EntityManager em = getEntityManager();
         try {
-            String query = "SELECT u FROM Users u WHERE u.username = :username1;";
+            String query = "SELECT u FROM Users u WHERE u.username =:username1";
             Query q = em.createQuery(query, Users.class);
             q.setParameter("username1", login);
             return (Users) q.getSingleResult();

@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>SajFly Obieg dokumentów</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" type="text/css" href="${applicationBackup.appCtx}/style/style.css" />
+    </h:head>
+    <h:body>
+        <script type="text/javascript">;
+            PrimeFaces.locales['pl'] = {
+                closeText: 'Zamknij',
+                prevText: 'Poprzedni',
+                nextText: 'Następny',
+                monthNames: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+                monthNamesShort: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
+                dayNames: ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'],
+                dayNamesShort: ['Nie', 'Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'So'],
+                dayNamesMin: ['N', 'P', 'W', 'Ś', 'Cz', 'P', 'S'],
+                weekHeader: 'Tydzień',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: 'r',
+                timeOnlyTitle: 'Tylko czas',
+                timeText: 'Czas',
+                hourText: 'Godzina',
+                minuteText: 'Minuta',
+                secondText: 'Sekunda',
+                currentText: 'Teraz',
+                ampm: false,
+                month: 'Miesiąc',
+                week: 'Tydzień',
+                day: 'Dzień',
+                allDayText: 'Cały dzień'
+            };
+        </script>
+        <h:form id="form">
+            <div id="main">
+                <div id="links"></div>
+                <div id="header">
+                    <div id="logo">
+                        <div id="logo_text">
+                            <!-- class="yellow", allows you to change the colour of the text - other classes are: "blue", "orange", "red", "purple" and "green" -->
+                            <h1><span class="yellow">&nbsp;</span></h1>
+                            <h2>SajFly Obieg dokumentów</h2>
+                        </div>
+                        <font style="text-align: right; position: relative; top: 130px; left: 800px">Version: #{applicationBackup.version}<font color="red" size="3"><b><p:outputLabel value=" #{applicationBackup.projectStage}" rendered="#{'Development' eq applicationBackup.projectStage or 'Unknow' eq applicationBackup.projectStage}"/></b></font></font>
+                    </div>
+                    <div id="menubar">
+                        <ul id="menu">
+                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="index" value="Klienci"/></li>
+                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="invoicelist" value="Lista faktur"/></li>
+                            <li onstart="dlg.show();" oncomplete="dlg.hide();"><h:link outcome="documentlist" value="Lista dokumentów"/></li>
+                            <li><p:commandLink value="Wyloguj" action="#{loginBackup.logout}"/></li>
+                        </ul>
+                        <ul id="menuhelp">
+                            <li><a href="${applicationBackup.appCtx}/admin/user.xhtml" align ="right">Użytkownicy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="site_content">
+                    <div id="content">
+                        <p:growl id="msg" showDetail="true" sticky="true"/>
+                        <h:inputHidden value="#{invoiceDetailsBean.filtr}"/>
+                        <h:inputHidden value="#{invoiceDetailsBean.selectedInvoice.id}"/>
+                        <p:panel header="Edycja klienta: #{detailsBean.selectedClient.dostawca}">
+                            <h:panelGrid columns="2" columnClasses="column" cellpadding="5" >
+                                <h:outputLabel for="Numer" value="Numer:" />
+                                <p:inplace id="numer" editor="true">
+                                    <p:inputText value="#{invoiceDetailsBean.selectedInvoice.number}" required="true"/>
+                                </p:inplace>
+
+                                <h:outputLabel for="Dostawca" value="Dostawca:" />
+                                <p:inplace id="E-Mail" editor="true">
+                                    <p:inputText value="#{invoiceDetailsBean.selectedInvoice.clientId.dostawca}" required="true"/>
+                                </p:inplace>
+
+                                <h:outputLabel for="Data_dodania" value="Data dodania:" />
+                                <p:inplace id="Data_dodania" editor="true">
+                                    <p:calendar value="#{invoiceDetailsBean.selectedInvoice.inserted}" required="true"/>
+                                </p:inplace>
+
+                                <h:outputLabel for="Termin_platnosci" value="Termin platnosci:"/>
+                                <p:inplace id="Termin_platnosci" editor="true">
+                                    <p:calendar value="#{invoiceDetailsBean.selectedInvoice.terminPlatnosci}"/>
+                                </p:inplace>
+                                
+                                <h:outputLabel for="Data_wystawienia" value="Data wystawienia:"/>
+                                <p:inplace id="Data_wystawienia" editor="true">
+                                    <p:calendar value="#{invoiceDetailsBean.selectedInvoice.terminWystawienia}"/>
+                                </p:inplace>
+
+                                <p:commandButton value="Zapisz" action="#{invoiceDetailsBean.updateInvoice()}" update=":form:msg"/>
+                            </h:panelGrid>
+
+                        </p:panel>
+                        <p:commandButton value="Usuń klienta" action="#{detailsBean.deleteClient}">
+                            <p:confirm header="Potwierdzenie" message="Czy na pewno?" icon="ui-icon-alert" />
+                        </p:commandButton>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                            <p:commandButton value="Tak" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" action="#{detailsBean.goToIndex}" />
+                            <p:commandButton value="Nie" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+
+                    </div>
+                </div>
+                <div id="footer">Copyright &copy; SajFly All Rights Reserved.</div>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jpa;
 
 import java.io.Serializable;
@@ -15,11 +14,16 @@ import entities.Users;
 import entities.Client;
 import entities.Invoice;
 import entities.InvoiceFile;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.servlet.ServletContext;
 import javax.transaction.UserTransaction;
 import jpa.exceptions.IllegalOrphanException;
 import jpa.exceptions.NonexistentEntityException;
@@ -280,5 +284,14 @@ public class InvoiceJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public void goToIndex() {
+        ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String appCtx = servletContext.getContextPath();
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(appCtx + "/system/invoice_list.xhtml");
+        } catch (IOException ex) {
+            Logger.getLogger(InvoiceJpaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
