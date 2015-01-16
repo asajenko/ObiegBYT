@@ -42,9 +42,14 @@ public class DetailsBean implements Serializable {
     private TransactionJpaController tjc = new TransactionJpaController();
     private String newContent = "";
     private String newTransactionContent = "";
+    private String confirmMessage;
 
     public DetailsBean() {
-        selectedClient = new Client();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        filtr = request.getParameter("id");
+        if (filtr != null) {
+            selectedClient = cjc.findClientByNumber(filtr);
+        }
     }
 
     public SessionBean getSessionBean() {
@@ -80,11 +85,6 @@ public class DetailsBean implements Serializable {
     }
 
     public String getFiltr() {
-        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        filtr = request.getParameter("id");
-        if (filtr != null) {
-            selectedClient = cjc.findClientByNumber(filtr);
-        }
         return filtr;
     }
 
@@ -100,52 +100,67 @@ public class DetailsBean implements Serializable {
         this.newContent = newContent;
     }
 
-  /*  public void addNewNote() {
-        try {
-            Note note = new Note();
-            note.setClientId(selectedClient);
-            Users user = sessionBean.getZalogowany();
-            note.setKonsultant(user.getLastName() + " " + user.getFirstName());
-            note.setTres(newContent);
-            njc.create(note);
-            selectedClient = cjc.findClient(selectedClient.getId());
-            newContent = "";
-            appBean.addFacesMessage("Zapisano notatke", 0);
-        } catch (RollbackFailureException ex) {
-            appBean.addFacesMessage("Błąd podczas zapisu notatki", 2);
-            Logger.getLogger(DetailsBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            appBean.addFacesMessage("Błąd podczas zapisu notatki", 2);
-            Logger.getLogger(DetailsBean.class.getName()).log(Level.SEVERE, null, ex);
+    public String getConfirmMessage() {
+        if (selectedClient != null) {
+            if (selectedClient.getInvoiceList() != null && selectedClient.getInvoiceList().size() > 0) {
+                return "Czy na pewno? Klient jest podłączony do faktury istniejącej w systemie.";
+            } else if (selectedClient.getInvoiceList() == null || selectedClient.getInvoiceList().isEmpty()) {
+                return "Czy na pewno?";
+            }
         }
+        return confirmMessage;
     }
 
-    public void addNewTrans() {
-        try {
-            Transaction transaction = new Transaction();
-            transaction.setClientId(selectedClient);
-            Users user = sessionBean.getZalogowany();
-            transaction.setKonsultant(user.getLastName() + " " + user.getFirstName());
-            transaction.setTresc(newTransactionContent);
-            for (TransactionStates state : sessionBean.getTransactionStates()) {
-                if (state.getState().equalsIgnoreCase("Wprowadzona")) {
-                    transaction.setStatus(state.getId());
-                    break;
-                }
-            }
-            tjc.create(transaction);
-            selectedClient = cjc.findClient(selectedClient.getId());
-            newTransactionContent = "";
-            appBean.addFacesMessage("Zapisano transakcje", 0);
-        } catch (RollbackFailureException ex) {
-            appBean.addFacesMessage("Błąd podczas zapisu transakcji", 2);
-            Logger.getLogger(DetailsBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            appBean.addFacesMessage("Błąd podczas zapisu transakcji", 2);
-            Logger.getLogger(DetailsBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void setConfirmMessage(String confirmMessage) {
+        this.confirmMessage = confirmMessage;
     }
-*/
+
+    /*  public void addNewNote() {
+     try {
+     Note note = new Note();
+     note.setClientId(selectedClient);
+     Users user = sessionBean.getZalogowany();
+     note.setKonsultant(user.getLastName() + " " + user.getFirstName());
+     note.setTres(newContent);
+     njc.create(note);
+     selectedClient = cjc.findClient(selectedClient.getId());
+     newContent = "";
+     appBean.addFacesMessage("Zapisano notatke", 0);
+     } catch (RollbackFailureException ex) {
+     appBean.addFacesMessage("Błąd podczas zapisu notatki", 2);
+     Logger.getLogger(DetailsBean.class.getName()).log(Level.SEVERE, null, ex);
+     } catch (Exception ex) {
+     appBean.addFacesMessage("Błąd podczas zapisu notatki", 2);
+     Logger.getLogger(DetailsBean.class.getName()).log(Level.SEVERE, null, ex);
+     }
+     }
+
+     public void addNewTrans() {
+     try {
+     Transaction transaction = new Transaction();
+     transaction.setClientId(selectedClient);
+     Users user = sessionBean.getZalogowany();
+     transaction.setKonsultant(user.getLastName() + " " + user.getFirstName());
+     transaction.setTresc(newTransactionContent);
+     for (TransactionStates state : sessionBean.getTransactionStates()) {
+     if (state.getState().equalsIgnoreCase("Wprowadzona")) {
+     transaction.setStatus(state.getId());
+     break;
+     }
+     }
+     tjc.create(transaction);
+     selectedClient = cjc.findClient(selectedClient.getId());
+     newTransactionContent = "";
+     appBean.addFacesMessage("Zapisano transakcje", 0);
+     } catch (RollbackFailureException ex) {
+     appBean.addFacesMessage("Błąd podczas zapisu transakcji", 2);
+     Logger.getLogger(DetailsBean.class.getName()).log(Level.SEVERE, null, ex);
+     } catch (Exception ex) {
+     appBean.addFacesMessage("Błąd podczas zapisu transakcji", 2);
+     Logger.getLogger(DetailsBean.class.getName()).log(Level.SEVERE, null, ex);
+     }
+     }
+     */
     public String getStateName(int id) {
         for (TransactionStates state : sessionBean.getTransactionStates()) {
             if (state.getId() == id) {
@@ -157,8 +172,8 @@ public class DetailsBean implements Serializable {
 
     public String deleteClient() {
         try {
-            appBean.addFacesMessage("Udało się usunąć klienta", 0);
             cjc.destroy(selectedClient.getId());
+            appBean.addFacesMessage("Udało się usunąć klienta", 0);
         } catch (RollbackFailureException ex) {
             Logger.getLogger(ListBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -178,6 +193,6 @@ public class DetailsBean implements Serializable {
         } catch (Exception ex) {
             Logger.getLogger(ListBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
     }
 }

@@ -106,8 +106,8 @@
 
                         </p:panel>
                         <p:commandButton value="Usuń klienta" action="#{detailsBean.deleteClient}">
-                            <p:confirm header="Potwierdzenie" message="Czy na pewno?" icon="ui-icon-alert" />
-                        </p:commandButton>
+                            <p:confirm header="Potwierdzenie" message="#{detailsBean.confirmMessage}" icon="ui-icon-alert"/>
+                        </p:commandButton> 
 
                         <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
                             <p:commandButton value="Tak" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" action="#{detailsBean.goToIndex}" />
