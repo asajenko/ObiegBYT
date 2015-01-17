@@ -95,6 +95,15 @@
                                 <h:outputLabel for="dataDostarczenia" value="Data Dostarczenia"/> 
                                 <p:calendar value="#{documentDetailsBean.selectedDocument.dataDostarczenia}" required="true">
                                 </p:calendar>
+
+                                <h:outputLabel for="Data_dodania" value="Data dodania:" />
+                                <h:outputText value="#{documentDetailsBean.selectedDocument.inserted}">
+                                    <f:converter converterId="web.DateConverterNotHours"/>
+                                </h:outputText>
+
+                                <h:outputLabel for="Osoba_dodająca" value="Osoba dodająca:" />
+                                <h:outputText value="#{documentDetailsBean.selectedDocument.insertedBy.firstName} #{documentDetailsBean.selectedDocument.insertedBy.lastName}"/>
+
                                 <h:outputLabel for="Nadawca" value="Nadawca"/>
                                 <p:inplace id="Nadawca" editor="true">
                                     <p:inputText value="#{documentDetailsBean.selectedDocument.nadawca}"/>

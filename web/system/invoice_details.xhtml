@@ -99,7 +99,9 @@
                                 </p:selectOneMenu>
 
                                 <h:outputLabel for="Data_dodania" value="Data dodania:" />
-                                <h:outputText value="#{invoiceDetailsBean.selectedInvoice.inserted}"/>
+                                <h:outputText value="#{invoiceDetailsBean.selectedInvoice.inserted}">
+                                    <f:converter converterId="web.DateConverterNotHours"/>
+                                </h:outputText>
                                 
                                 <h:outputLabel for="Osoba_dodająca" value="Osoba dodająca:" />
                                 <h:outputText value="#{invoiceDetailsBean.selectedInvoice.insertedBy.firstName} #{invoiceDetailsBean.selectedInvoice.insertedBy.lastName}"/>
