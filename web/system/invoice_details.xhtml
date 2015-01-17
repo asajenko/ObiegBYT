@@ -94,24 +94,21 @@
                                 </p:inplace>
 
                                 <h:outputLabel for="clientId" value="Dostawca:" />
-                                <p:inplace id="clientId" editor="true">
-                                    <p:inputText value="#{invoiceDetailsBean.selectedInvoice.clientId.dostawca}" required="true"/>
-                                </p:inplace>
+                                <p:selectOneMenu value="#{invoiceDetailsBean.selectedInvoice.clientId}" converter="#{clientConverter}">
+                                    <f:selectItems value="#{invoiceListBean.clients}" var="client" itemLabel="#{client.dostawca}" itemValue="#{client}"/>
+                                </p:selectOneMenu>
 
                                 <h:outputLabel for="Data_dodania" value="Data dodania:" />
-                                <p:inplace id="Data_dodania" editor="true">
-                                    <p:calendar value="#{invoiceDetailsBean.selectedInvoice.inserted}" required="true"/>
-                                </p:inplace>
+                                <h:outputText value="#{invoiceDetailsBean.selectedInvoice.inserted}"/>
+                                
+                                <h:outputLabel for="Osoba_dodająca" value="Osoba dodająca:" />
+                                <h:outputText value="#{invoiceDetailsBean.selectedInvoice.insertedBy.firstName} #{invoiceDetailsBean.selectedInvoice.insertedBy.lastName}"/>
 
                                 <h:outputLabel for="Termin_platnosci" value="Termin platnosci:"/>
-                                <p:inplace id="Termin_platnosci" editor="true">
-                                    <p:calendar value="#{invoiceDetailsBean.selectedInvoice.terminPlatnosci}"/>
-                                </p:inplace>
+                                <p:calendar value="#{invoiceDetailsBean.selectedInvoice.terminPlatnosci}"/>
 
                                 <h:outputLabel for="Data_wystawienia" value="Data wystawienia:"/>
-                                <p:inplace id="Data_wystawienia" editor="true">
-                                    <p:calendar value="#{invoiceDetailsBean.selectedInvoice.terminWystawienia}"/>
-                                </p:inplace>
+                                <p:calendar value="#{invoiceDetailsBean.selectedInvoice.terminWystawienia}"/>
 
                                 <h:outputLabel value="Opis merytoryczny:"/>
                                 <h:inputTextarea value="#{invoiceDetailsBean.selectedInvoice.merytoryczny}" disabled="#{sessionBean.isUzytkownik == false and sessionBean.isKsiegowosc == false and sessionBean.isZarzad == false}" cols="50" rows="3"/>

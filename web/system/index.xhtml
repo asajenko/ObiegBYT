@@ -98,12 +98,12 @@
 
                         <p:dialog id="addDlg" widgetVar="addDlg">
                             <h:panelGrid columns="2" columnClasses="column" cellpadding="5" >
-                                Numer: <p:inputText value="#{listBean.newClient.number}"/><br/>
-                                Adres: <p:inputText value="#{listBean.newClient.adres}"/><br/>
-                                Email: <p:inputText value="#{listBean.newClient.email}"/><br/>
-                                Dostawca: <p:inputText value="#{listBean.newClient.dostawca}"/><br/>
-                                Produkt: <p:inputText value="#{listBean.newClient.produkt}"/><br/>
-                                Typ dostawcy: <p:inputText value="#{listBean.newClient.typdostawcy}"/><br/>
+                                Numer: <p:inputText value="#{listBean.newClient.number}" required="true" requiredMessage="Pole Numer musi być uzupełnione"/><br/>
+                                Adres: <p:inputText value="#{listBean.newClient.adres}" required="true" requiredMessage="Pole Adres musi być uzupełnione"/><br/>
+                                Email: <p:inputText value="#{listBean.newClient.email}" required="true" requiredMessage="Pole Email musi być uzupełnione"/><br/>
+                                Dostawca: <p:inputText value="#{listBean.newClient.dostawca}" required="true" requiredMessage="Pole Dostawca musi być uzupełnione"/><br/>
+                                Produkt: <p:inputText value="#{listBean.newClient.produkt}" required="true" requiredMessage="Pole Produkt musi być uzupełnione"/><br/>
+                                Typ dostawcy: <p:inputText value="#{listBean.newClient.typdostawcy}" required="true" requiredMessage="Pole Typ dostawcy musi być uzupełnione"/><br/>
                                 <p:commandButton value="Dodaj" action="#{listBean.createClient()}" update=":form:clientTable msg" oncomplete="PF('addDlg').hide();"/>
                             </h:panelGrid>
                         </p:dialog>
