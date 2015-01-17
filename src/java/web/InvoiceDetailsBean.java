@@ -6,8 +6,13 @@
 package web;
 
 import entities.Invoice;
+import entities.InvoiceFile;
 import entities.TransactionStates;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
@@ -15,7 +20,10 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import jpa.InvoiceFileJpaController;
 import jpa.InvoiceJpaController;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -33,6 +41,30 @@ public class InvoiceDetailsBean implements Serializable {
     private Invoice selectedInvoice;
     private InvoiceJpaController ijc = new InvoiceJpaController();
     private String newContent = "";
+    private List<InvoiceFile> plikiFaktura;
+    private String fileToDownload;
+    private StreamedContent fileToDownload1;
+
+    public String getFileToDownload() {
+        return fileToDownload;
+    }
+
+    public void setFileToDownload(String fileToDownload) {
+        this.fileToDownload = fileToDownload;
+    }
+
+    public List<InvoiceFile> getPlikiFaktura() {
+        if (selectedInvoice != null) {
+            plikiFaktura = selectedInvoice.getInvoiceFileList();
+        } else {
+            plikiFaktura = new ArrayList<InvoiceFile>();
+        }
+        return plikiFaktura;
+    }
+
+    public void setPlikiFaktura(List<InvoiceFile> plikiFaktura) {
+        this.plikiFaktura = plikiFaktura;
+    }
 
     public InvoiceDetailsBean() {
         selectedInvoice = new Invoice();
@@ -91,14 +123,35 @@ public class InvoiceDetailsBean implements Serializable {
     public void setNewContent(String newContent) {
         this.newContent = newContent;
     }
-    
-       public void updateInvoice() {
+
+    public void updateInvoice() {
         try {
             ijc.edit(selectedInvoice);
             appBean.addFacesMessage("Udało się zapisać nowe dane faktury", 0);
         } catch (Exception ex) {
             Logger.getLogger(ListBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+    }
+
+    public StreamedContent getFileToDownload1() {
+        if (fileToDownload != null) {
+            try {
+                InvoiceFileJpaController pjc = new InvoiceFileJpaController();
+                InvoiceFile p = pjc.findInvoiceFile(Integer.valueOf(fileToDownload));
+                File f = new File(p.getPath());
+                FileInputStream fstr = new FileInputStream(f);
+                fileToDownload1 = new DefaultStreamedContent(fstr, "attachment", p.getName());
+                if (p.getName().endsWith(".msg")) {
+                    fileToDownload1 = new DefaultStreamedContent(fstr, "application/vnd.ms-outlook", p.getName());
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return fileToDownload1;
+    }
+
+    public void setFileToDownload1(StreamedContent fileToDownload1) {
+        this.fileToDownload1 = fileToDownload1;
     }
 }

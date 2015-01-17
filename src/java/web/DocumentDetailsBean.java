@@ -6,9 +6,14 @@
 package web;
 
 import entities.Document;
+import entities.DocumentFile;
 import entities.Invoice;
 import entities.TransactionStates;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
@@ -16,8 +21,11 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import jpa.DocumentFileJpaController;
 import jpa.DocumentJpaController;
 import jpa.InvoiceJpaController;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -35,6 +43,30 @@ public class DocumentDetailsBean implements Serializable {
     private Document selectedDocument;
     private DocumentJpaController djc = new DocumentJpaController();
     private String newContent = "";
+    private List<DocumentFile> plikiFaktura;
+    private String fileToDownload;
+    private StreamedContent fileToDownload1;
+
+    public String getFileToDownload() {
+        return fileToDownload;
+    }
+
+    public void setFileToDownload(String fileToDownload) {
+        this.fileToDownload = fileToDownload;
+    }
+
+    public List<DocumentFile> getPlikiFaktura() {
+        if (selectedDocument != null) {
+            plikiFaktura = selectedDocument.getDocumentFileList();
+        } else {
+            plikiFaktura = new ArrayList<DocumentFile>();
+        }
+        return plikiFaktura;
+    }
+
+    public void setPlikiFaktura(List<DocumentFile> plikiFaktura) {
+        this.plikiFaktura = plikiFaktura;
+    }
 
     public DocumentDetailsBean() {
         selectedDocument = new Document();
@@ -93,14 +125,35 @@ public class DocumentDetailsBean implements Serializable {
     public void setNewContent(String newContent) {
         this.newContent = newContent;
     }
-    
-       public void updateDocument() {
+
+    public void updateDocument() {
         try {
             djc.edit(selectedDocument);
             appBean.addFacesMessage("Udało się zapisać nowe dane dokumentu", 0);
         } catch (Exception ex) {
             Logger.getLogger(ListBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+    }
+
+    public StreamedContent getFileToDownload1() {
+        if (fileToDownload != null) {
+            try {
+                DocumentFileJpaController pjc = new DocumentFileJpaController();
+                DocumentFile p = pjc.findDocumentFile(Integer.valueOf(fileToDownload));
+                File f = new File(p.getPath());
+                FileInputStream fstr = new FileInputStream(f);
+                fileToDownload1 = new DefaultStreamedContent(fstr, "attachment", p.getName());
+                if (p.getName().endsWith(".msg")) {
+                    fileToDownload1 = new DefaultStreamedContent(fstr, "application/vnd.ms-outlook", p.getName());
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return fileToDownload1;
+    }
+
+    public void setFileToDownload1(StreamedContent fileToDownload1) {
+        this.fileToDownload1 = fileToDownload1;
     }
 }

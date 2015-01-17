@@ -69,6 +69,23 @@
                         <p:growl id="msg" showDetail="true" sticky="true"/>
                         <h:inputHidden value="#{invoiceDetailsBean.filtr}"/>
                         <h:inputHidden value="#{invoiceDetailsBean.selectedInvoice.id}"/>
+                        <p:panel id="panelFile">
+                            <h:panelGrid columns="2">
+                                <ui:repeat var="file" value="#{invoiceDetailsBean.plikiFaktura}">
+                                    <h:outputText value="#{file.name}"/>&nbsp;&nbsp;&nbsp;
+                                    <h:commandLink value="Pobierz plik">
+                                        <f:setPropertyActionListener value="#{file.id}" target="#{invoiceDetailsBean.fileToDownload}" />
+                                        <p:fileDownload value="#{invoiceDetailsBean.fileToDownload1}" />
+                                    </h:commandLink>
+                                    <br/>
+                                </ui:repeat>
+                            </h:panelGrid>
+                            <div align="right">
+                                <h:panelGrid>
+                                    <h:outputText value="#{detailsBean_faktury.lastStatus}"/>
+                                </h:panelGrid>
+                            </div>
+                        </p:panel>
                         <p:panel header="Edycja faktury: #{invoiceDetailsBean.selectedInvoice.id}">
                             <h:panelGrid columns="2" columnClasses="column" cellpadding="5" >
                                 <h:outputLabel for="Number" value="Numer:" />
