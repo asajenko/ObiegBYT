@@ -98,11 +98,16 @@
                                     <f:selectItems value="#{invoiceListBean.clients}" var="client" itemLabel="#{client.dostawca}" itemValue="#{client}"/>
                                 </p:selectOneMenu>
 
+                                <h:outputLabel for="Brutto" value="Brutto:" />
+                                <p:inplace id="Brutto" editor="true">
+                                    <p:inputText value="#{invoiceDetailsBean.selectedInvoice.brutto}" required="true"/>
+                                </p:inplace>
+
                                 <h:outputLabel for="Data_dodania" value="Data dodania:" />
                                 <h:outputText value="#{invoiceDetailsBean.selectedInvoice.inserted}">
                                     <f:converter converterId="web.DateConverterNotHours"/>
                                 </h:outputText>
-                                
+
                                 <h:outputLabel for="Osoba_dodająca" value="Osoba dodająca:" />
                                 <h:outputText value="#{invoiceDetailsBean.selectedInvoice.insertedBy.firstName} #{invoiceDetailsBean.selectedInvoice.insertedBy.lastName}"/>
 
