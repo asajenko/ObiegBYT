@@ -67,8 +67,8 @@
 
                     <div id="content">
                         <p:growl id="msg" showDetail="true" sticky="true"/>
-                        <p:commandButton onclick="PF('addDlg').show();" value="Stwórz kontrahenta" rendered="#{sessionBean.isSekretariat}"/>
-                        <p:dataTable value="#{listBean.clients}" var="client" id="clientTable" rendered="#{sessionBean.isSekretariat}">
+                        <p:commandButton onclick="PF('addDlg').show();" value="Stwórz kontrahenta" rendered="#{sessionBean.isSekretariat or sessionBean.isZarzad}"/>
+                        <p:dataTable value="#{listBean.clients}" var="client" id="clientTable" rendered="#{sessionBean.isSekretariat or sessionBean.isZarzad}">
 
                             <p:column headerText="ID">
                                 #{client.id}
@@ -92,7 +92,7 @@
                                 #{client.typdostawcy}
                             </p:column>
                             <p:column headerText="Akcje">
-                                <p:commandButton icon="ui-icon ui-icon-search" action="#{listBean.goToDetails(client.number)}" title="Szczegóły" onstart="dlg.show();" oncomplete="dlg.hide();" immediate="true"/>
+                                <p:commandButton icon="ui-icon ui-icon-search" action="#{listBean.goToDetails(client.id)}" title="Szczegóły" onstart="dlg.show();" oncomplete="dlg.hide();" immediate="true"/>
                             </p:column>
                         </p:dataTable>
 

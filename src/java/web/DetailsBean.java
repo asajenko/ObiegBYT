@@ -48,7 +48,7 @@ public class DetailsBean implements Serializable {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         filtr = request.getParameter("id");
         if (filtr != null) {
-            selectedClient = cjc.findClientByNumber(filtr);
+            selectedClient = cjc.findClientById(filtr);
         }
     }
 

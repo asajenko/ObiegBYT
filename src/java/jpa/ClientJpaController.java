@@ -331,10 +331,10 @@ public class ClientJpaController implements Serializable {
         }
     }
 
-    public Client findClientByNumber(String number) {
+    public Client findClientById(String id) {
         EntityManager em = getEntityManager();
         try {
-            String query = "SELECT c FROM Client c WHERE c.number = " + number;
+            String query = "SELECT c FROM Client c WHERE c.id = " + id;
             Query q = em.createQuery(query);
             return (Client) q.getSingleResult();
         } catch (Exception ex) {
